@@ -29,12 +29,8 @@ import * as filters from './filters' // global filters
  */
 import { mockXHR } from '../mock'
 
-// if (process.env.NODE_ENV === 'production') {
-//   mockXHR()
-// }
-//通过环境变量来判断是否需要加载启用--wcc
 if (process.env.NODE_ENV === 'production') {
-  require('../mock/index.js') // production data
+  mockXHR()
 }
 
 Vue.use(Element, {
