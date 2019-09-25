@@ -10,7 +10,9 @@ import userManage from './userManage'
 import search from './remote-search'
 import bankManage from './bankManage'
 import settleTypeManage from './settleTypeManage'
-import dataReport from './dataReport'
+import dataUpload from './dataUpload'
+import dataSelect from './dataSelect'
+import logView from './logView'
 
 const mocks = [
   ...user,
@@ -22,7 +24,9 @@ const mocks = [
   ...search,
   ...bankManage,
   ...settleTypeManage,
-  ...dataReport
+  ...dataUpload,
+  ...dataSelect,
+  ...logView
 ]
 
 // for front mock

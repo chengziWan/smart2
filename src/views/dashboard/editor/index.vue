@@ -5,10 +5,9 @@
         Your roles:
         <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
       </pan-thumb>
-      <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's 首页</span>
       </div>
     </div>
     <div>
@@ -20,11 +19,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
-import GithubCorner from '@/components/GithubCorner'
 
 export default {
   name: 'DashboardEditor',
-  components: { PanThumb, GithubCorner },
+  components: { PanThumb },
   data() {
     return {
       emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
@@ -49,7 +47,7 @@ export default {
 
   .dashboard-editor-container {
     background-color: #e3e3e3;
-    min-height: 100vh;
+    min-height: 80vh;
     padding: 50px 60px 0px;
     .pan-info-roles {
       font-size: 12px;
@@ -60,7 +58,7 @@ export default {
     .info-container {
       position: relative;
       margin-left: 190px;
-      height: 150px;
+      height: 100px;
       line-height: 200px;
       .display_name {
         font-size: 48px;

@@ -4,55 +4,42 @@
         </aside>
     <aside><strong>分类上传</strong>
         <DataTypeOption v-model="dataType" style="margin-left: 80px;"/>
-        <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">
-          上传
-        </el-button>
+        <upload-excel-component id="upload1" :on-success="handleSuccess" :before-upload="beforeUpload" style="display: inline-block;" />
     </aside>
     <aside><strong>打包上传</strong>
-        <el-button type="primary" icon="el-icon-upload" style="margin-left: 377px;" @click="imagecropperShow=true">
-          上传
-        </el-button>
+        <upload-excel-component id="upload2" :on-success="handleSuccess" :before-upload="beforeUpload" style="display: inline-block;margin-left: 380px;" />
     </aside>
-    <image-cropper
-      v-show="imagecropperShow"
-      :key="imagecropperKey"
-      :width="300"
-      :height="300"
-      url="https://httpbin.org/post"
-      lang-type="en"
-      @close="close"
-      @crop-upload-success="cropSuccess"
-    />
+
     <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
-      <el-table-column align="center" label="序号" width="80">
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
+      <el-table-column align="center" label="上传编号" >
+        <template slot-scope="{row}">
+          {{ row.id }}
         </template>
       </el-table-column>
       <el-table-column label="银行名称" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.bank_name }}
+        <template slot-scope="{row}">
+          {{ row.bank_name }}
         </template>
       </el-table-column>
       <el-table-column label="数据类型" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.dataType }}
+        <template slot-scope="{row}">
+          {{ row.dataType }}
         </template>
       </el-table-column>
       <el-table-column label="上传人" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.usrName }}
+        <template slot-scope="{row}">
+          {{ row.usrName }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="上传时间" >
-        <template slot-scope="scope">
+        <template slot-scope="{row}">
           <i class="el-icon-time" />
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.status }}
+        <template slot-scope="{row}">
+          {{ row.status }}
         </template>
       </el-table-column>
     </el-table>
@@ -61,20 +48,20 @@
 
 <script>
 
-import ImageCropper from '@/components/ImageCropper'
 import DataTypeOption from './components/DataTypeOption'
 import { getDataUploadList } from '@/api/dataUpload'
+import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 export default {
   name: 'AvatarUploadDemo',
-  components: { ImageCropper, DataTypeOption },
+  components: { DataTypeOption, UploadExcelComponent },
   data() {
     return {
-      imagecropperShow: false,
-      imagecropperKey: 0,
       dataType: '请选择',
       list: [],
       listLoading: true,
-      autoWidth: true
+      autoWidth: true,
+      tableData: [],
+      tableHeader: []
     }
   },
   created() {
@@ -84,25 +71,34 @@ export default {
     async fetchData() {
       this.listLoading = true
       const res = await getDataUploadList()
-      this.list = res.data
+      this.list = res.data.items
       this.listLoading = false
     },
+    beforeUpload(file) {
+      console.log(file.name)
+      const isLt1M = file.size / 1024 / 1024 < 1
 
-    cropSuccess(resData) {
-      this.imagecropperShow = false
-      this.imagecropperKey = this.imagecropperKey + 1
+      if (isLt1M) {
+        return true
+      }
+
+      this.$message({
+        message: 'Please do not upload files larger than 1m in size.',
+        type: 'warning'
+      })
+      return false
     },
-    close() {
-      this.imagecropperShow = false
+    handleSuccess({ results, header }) {
+      this.tableData = results
+      this.tableHeader = header
+      console.log(this.tableData)
+      console.log(this.tableHeader)
     }
+
   }
 }
 </script>
 
 <style scoped>
-  .avatar{
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-  }
+
 </style>

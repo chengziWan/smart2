@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function getDataUploadList() {
   return request({
-    url: '/dataUploadList',
+    url: '/dataUpload/dataUploadList',
     method: 'get'
   })
 }
 
 export function getBanks() {
   return request({
-    url: '/getBanks',
+    url: '/dataUpload/getBanks',
     method: 'get'
   })
 }
