@@ -165,7 +165,7 @@ export default {
           })
           .catch(err => { console.error(err) })
       }else{
-          this.$confirm('当前数据状态不能上传', '警告', {
+          this.$confirm('当前数据状态不能上报', '警告', {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning'

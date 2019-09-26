@@ -66,7 +66,7 @@
       </template>
     </split-pane>
     <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑信息':'新增信息'">
-      <el-form :model="item" label-width="80px" label-position="left">
+      <el-form :model="item" label-width="120px" label-position="right">
         <el-form-item label="报告机构编码">
           <el-input v-model="item.head_no" placeholder="head_no" />
         </el-form-item>

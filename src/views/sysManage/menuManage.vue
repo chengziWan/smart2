@@ -26,7 +26,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="菜单编号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="菜单编号" prop="id" sortable="custom" align="center" width="120px" :class-name="getSortClass('id')">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -139,7 +139,7 @@ export default {
         name: undefined,
         sort: '+id'
       },
-      sortOptions: [{ label: 'ID 升序', key: '+id' }, { label: 'ID 降序', key: '-id' }],
+      sortOptions: [{ label: '菜单编号 升序', key: '+id' }, { label: '菜单编号 降序', key: '-id' }],
       statusOptions: ['published', 'deleted'],
       showReviewer: false,
       temp: {

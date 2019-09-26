@@ -24,7 +24,7 @@
        <div>
          <div class="filter-container">
            <!-- <el-input v-model="listQuery.name" placeholder="菜单名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
-           <el-select v-model="listQuery.dataType" style="width: 240px" class="filter-item" @change="handleFilter">
+           <el-select v-model="listQuery.dataType" style="width: 300px" class="filter-item" @change="handleFilter">
              <el-option v-for="item in dataTypeOptions" :key="item.key" :label="item.label" :value="item.key" />
            </el-select>
            <!-- <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
@@ -34,8 +34,8 @@
              查询
            </el-button>
          </div>
-         <el-table :data="tableData" border highlight-current-row fit style="width: 100%;margin-top:20px;" >
-           <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" />
+         <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
+           <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" :width="flexColumnWidth(item)" :show-overflow-tooltip="true" />
          </el-table>
         <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
          </div>
@@ -94,7 +94,19 @@ export default {
         sort: '+id'
       },
       sortOptions: [{ label: 'ID 升序', key: '+id' }, { label: 'ID 降序', key: '-id' }],
-      dataTypeOptions: [{ label: '个人客户存量信息表', key: 'aa1' }, { label: '单位客户存量信息表', key: 'aa2' }]
+      dataTypeOptions: [{ key: 'tb_cst_pers', label: '存量个人客户身份信息表'},
+                        { key: 'tb_cst_unit', label: '存量单位客户身份信息表'},
+                        { key: 'tb_acc', label: '符合特定条件的银行账户信息表'},
+                        { key: 'tb_acc_txn', label: '基于客户账户的交易数据表'},
+                        { key: 'tb_cross_border', label: '跨境汇款交易数据表'},
+                        { key: 'tb_cred_txn', label: '信用卡账户金融交易数据表'},
+                        { key: 'tb_cash_remit', label: '现金汇款交易流水'},
+                        { key: 'tb_cash_convert', label: '现钞兑换交易明细表'},
+                        { key: 'tb_risk_new', label: '存量客户最新风险等级表'},
+                        { key: 'tb_risk_his', label: '存量客户检查期限内历次风险等级划分表'},
+                        { key: 'tb_lwhc_log', label: '公民联网核查日志记录表'},
+                        { key: 'tb_lar_report', label: '大额交易报告明细'},
+                        { key: 'tb_sus_report', label: '可疑交易报告明细'}]
 
     }
   },
@@ -190,6 +202,31 @@ export default {
         : sort === `-${key}`
           ? 'descending'
           : ''
+    },
+    // 自定义表头列宽
+    flexColumnWidth(str) {
+      let flexWidth = 0
+      for (const char of str) {
+        if ((char >= 'A' && char <= 'Z') || (char >= 'a' && char <= 'z')) {
+          // 如果是英文字符，为字符分配8个单位宽度
+          flexWidth += 18
+        } else if (char >= '\u4e00' && char <= '\u9fa5') {
+          // 如果是中文字符，为字符分配20个单位宽度
+          flexWidth += 50
+        } else {
+          // 其他种类字符，为字符分配5个单位宽度
+          flexWidth += 15
+        }
+      }
+      if (flexWidth < 50) {
+        // 设置最小宽度
+        flexWidth = 100
+      }
+      // if (flexWidth > 250) {
+      //   // 设置最大宽度
+      //   flexWidth = 250
+      // }
+      return flexWidth + 'px'
     }
   }
 }

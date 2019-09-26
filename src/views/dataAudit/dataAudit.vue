@@ -77,7 +77,7 @@
       </template>
     </split-pane>
     <el-dialog :visible.sync="dialogVisible" title="详细信息">
-          <el-form :model="role" label-width="80px" label-position="left">
+          <el-form :model="role" label-width="80px" label-position="right">
             <el-form-item label="银行名称">
               <el-input v-model="role.bank_name" placeholder="Role Name" :readonly="true"/>
             </el-form-item>

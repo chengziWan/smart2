@@ -2,46 +2,32 @@ import Mock from 'mockjs'
 
 const List = [{
     head_no: 'BGJG102',
-    settle_type: 'JGWD102001',
-    name: 'JRJG102001',
+    settle_type: 'YWLX001',
+    name: '取现',
     bord_type: '境内',
     bank_name: '工商银行济南分行'
   },
   {
     head_no: 'BGJG102',
-    settle_type: 'JGWD102002',
-    name: 'JRJG102002',
+    settle_type: 'YWLX002',
+    name: '存款',
     bord_type: '境内',
     bank_name: '工商银行烟台分行'
   },
   {
     head_no: 'BGJG102',
-    settle_type: 'JGWD102001',
-    name: 'JRJG102001',
+    settle_type: 'YWLX003',
+    name: '转入',
     bord_type: '境内',
     bank_name: '工商银行济南分行'
   },
   {
     head_no: 'BGJG102',
-    settle_type: 'JGWD102002',
-    name: 'JRJG102002',
+    settle_type: 'YWLX004',
+    name: '转出',
     bord_type: '境内',
     bank_name: '工商银行烟台分行'
-  },
-  {
-      head_no: 'BGJG102',
-      settle_type: 'JGWD102001',
-      name: 'JRJG102001',
-      bord_type: '境内',
-      bank_name: '工商银行济南分行'
-    },
-    {
-      head_no: 'BGJG102',
-      settle_type: 'JGWD102002',
-      name: 'JRJG102002',
-      bord_type: '境内',
-      bank_name: '工商银行烟台分行'
-    },
+  }
 ]
 const treeData = [{
     id: 1,

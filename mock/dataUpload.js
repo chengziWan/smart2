@@ -16,6 +16,7 @@ const roles = [
     usrName: 'admin',
     timestamp: '2019-09-19 12:21:23',
     status:'已上传',
+    saveNum: '2',
     saveTable: 'tb_cst_pers_20190919_BGJG102',
     saveResult: '由原表XXXX归档至表tb_cst_pers_20190919_BGJG102',
   },
@@ -33,6 +34,7 @@ const roles = [
     usrName: 'admin',
     timestamp: '2019-09-19 12:21:23',
     status:'已上传',
+    saveNum: '1',
     saveTable: 'tb_cst_pers_20190919_BGJG102',
     saveResult: '由原表XXXX归档至表tb_cst_unit_20190919_BGJG102',
   },
@@ -79,7 +81,7 @@ export default [
     type: 'get',
     response: config => {
       const { dataType, page = 1, limit = 20, sort } = config.query
-    
+
       // let mockList = List.filter(item => {
       //   if (name && item.name.indexOf(name) < 0) return false
       //   return true
@@ -88,9 +90,9 @@ export default [
       if (sort === '-id') {
         mockList = mockList.reverse()
       }
-    
+
       const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-    
+
       return {
         code: 20000,
         data: {
@@ -110,6 +112,16 @@ export default [
         data: banks
       }
     }
-  }
+  },
+  {
+    url: '/dataUpload/create',
+    type: 'post',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success'
+      }
+    }
+  },
 
 ]

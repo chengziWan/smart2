@@ -13,3 +13,10 @@ export function getBanks() {
     method: 'get'
   })
 }
+export function createItem(data) {
+  return request({
+    url: '/dataUpload/create',
+    method: 'post',
+    data
+  })
+}

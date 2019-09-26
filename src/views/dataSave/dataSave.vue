@@ -35,7 +35,7 @@
            </el-button>
          </div>
           <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
-            <el-table-column align="center" label="序号" width="80">
+            <el-table-column align="center" label="序号" width="70px">
                           <template slot-scope="scope">
                             {{ scope.$index+1 }}
                           </template>
@@ -45,15 +45,15 @@
                             {{ scope.row.bank_name }}
                           </template>
                         </el-table-column>
-                        <!-- <el-table-column label="归档次数" align="center">
+                        <el-table-column label="归档次数" align="center" width="80px">
                           <template slot-scope="scope">
                             {{ scope.row.saveNum }}
                           </template>
-                        </el-table-column> -->
+                        </el-table-column>
                         <el-table-column align="center" label="归档时间" >
                           <template slot-scope="scope">
                             <i class="el-icon-time" />
-                            <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                            <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
                           </template>
                         </el-table-column>
                         <el-table-column label="数据类型" align="center">
@@ -86,38 +86,7 @@
          </div>
       </template>
     </split-pane>
-    <el-dialog :visible.sync="dialogVisible" title="详细信息">
-          <el-form :model="role" label-width="80px" label-position="left">
-            <el-form-item label="银行名称">
-              <el-input v-model="role.bank_name" placeholder="Role Name" :readonly="true"/>
-            </el-form-item>
-            <el-form-item label="审计次数">
-              <el-input v-model="role.auditNum" placeholder="Role Name" :readonly="true"/>
-            </el-form-item>
-            <el-form-item label="审计时间">
-              <el-input v-model="role.timestamp" placeholder="Role Name" :readonly="true"/>
-            </el-form-item>
-            <el-form-item label="审计人">
-              <el-input v-model="role.usrName" placeholder="Role Name" :readonly="true"/>
-            </el-form-item>
-            <el-form-item label="审计结果">
-              <el-input v-model="role.auditResult" placeholder="Role Name" :readonly="true"/>
-            </el-form-item>
-            <el-form-item label="审计明细">
-              <el-input
-                v-model="role.auditDetail"
-                :autosize="{ minRows: 2, maxRows: 4}"
-                type="textarea"
-                placeholder="Role Description"
-                :readonly="true"
-              />
-            </el-form-item>
 
-          </el-form>
-          <div style="text-align:right;">
-            <el-button type="danger" @click="dialogVisible=false">关闭</el-button>
-          </div>
-        </el-dialog>
   </div>
 </template>
 
@@ -125,7 +94,7 @@
 
 
 import splitPane from 'vue-splitpane'
-import { getDataUploadList } from '@/api/dataUpload'
+import { getDataUploadList, createItem } from '@/api/dataUpload'
 import { getTree } from '@/api/bankManage'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -150,7 +119,6 @@ export default {
   data() {
     return {
       role: {},
-      dialogVisible: false,
       filterText: '',
       // TODO 银行树的数据
       treeData: [],
@@ -226,7 +194,7 @@ export default {
       // 刷新右边查询table
       defaultItem.parent_id = node.id
       this.list = []
-      //this.getList(node.id)
+      this.getList(node.id)
     },
     getList() {
       this.listLoading = true
@@ -278,26 +246,24 @@ export default {
         type: 'warning'
       })
         .then(async() => {
+          const temp = { bank_name: '工商银行济南分行',
+                        dataType: '存量单位客户信息表',saveNum:  this.list.length+1,
+                        saveTable: 'tb_cst_pers_20190919_BGJG102',
+                        saveResult: '由原表XXXX归档至表tb_cst_unit_20190919_BGJG102', usrName: 'admin',
+                        timestamp: new Date()}
+          createItem(temp).then(() => {
+            this.list.unshift(temp)
+            this.$message({
+              type: 'success',
+              message: '审计完毕!'
+            })
+          })
           //await deleteRole(row.key)
           //this.rolesList.splice($index, 1)
-          this.getList(defaultItem.parent_id)
-          this.$message({
-            type: 'success',
-            message: '审计完毕!'
-          })
+          //this.getList(defaultItem.parent_id)
+
         })
         .catch(err => { console.error(err) })
-    },
-    viewDetail(row) {
-      this.role = Object.assign({}, row) // copy obj
-      console.log(this.role)
-      this.dialogType = 'view'
-      this.dialogVisible = true
-      this.checkStrictly = true
-      this.$nextTick(() => {
-        // set checked state of a node not affects its father and child nodes
-        this.checkStrictly = false
-      })
     }
   }
 }

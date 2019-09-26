@@ -150,7 +150,7 @@ export default {
         id: undefined,
         sort: '+id'
       },
-      sortOptions: [{ label: 'ID 升序', key: '+id' }, { label: 'ID 降序', key: '-id' }],
+      sortOptions: [{ label: '登录账号 升序', key: '+id' }, { label: '登录账号 降序', key: '-id' }],
       statusOptions: ['published', 'deleted'],
       showReviewer: false,
       temp: {

@@ -146,7 +146,7 @@ export default {
         name: undefined,
         sort: '+id'
       },
-      sortOptions: [{ label: 'ID 升序', key: '+id' }, { label: 'ID 降序', key: '-id' }],
+      sortOptions: [{ label: '角色编号 升序', key: '+id' }, { label: '角色编号 降序', key: '-id' }],
       statusOptions: ['published', 'deleted'],
       showReviewer: false,
       temp: {
