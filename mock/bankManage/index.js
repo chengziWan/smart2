@@ -100,10 +100,26 @@ export default [
   {
     url: '/bankManage/getTableList',
     type: 'get',
-    response: _ => {
+    response: config => {
+      const { name, page = 1, limit = 20, sort } = config.query
+    
+      let mockList = List.filter(item => {
+        if (name && item.name.indexOf(name) < 0) return false
+        return true
+      })
+    
+      if (sort === '-id') {
+        mockList = mockList.reverse()
+      }
+    
+      const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+    
       return {
         code: 20000,
-        data: List
+        data: {
+          total: mockList.length,
+          items: pageList
+        }
       }
     }
   },

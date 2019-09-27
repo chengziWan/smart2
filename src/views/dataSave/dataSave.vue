@@ -82,7 +82,7 @@
                           </template>
                         </el-table-column> -->
           </el-table>
-        <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
+        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
          </div>
       </template>
     </split-pane>
@@ -101,7 +101,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 
 const defaultItem = {
   dataType: '',
-  parent_id: null
+  parent_id: ''
 }
 export default {
   name: 'ComplexTable',
@@ -212,7 +212,6 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.listLoading = true
       this.getList()
     },
 
@@ -240,6 +239,10 @@ export default {
           : ''
     },
     handleSave() {
+      if (defaultItem.parent_id === '') {
+        this.$message.error('请先选择银行网点再归档')
+        return false
+      }
       this.$confirm('确认归档此银行的记录吗?', '警告', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
@@ -247,7 +250,7 @@ export default {
       })
         .then(async() => {
           const temp = { bank_name: '工商银行济南分行',
-                        dataType: '存量单位客户信息表',saveNum:  this.list.length+1,
+                        dataType: '存量单位客户信息表',saveNum: this.list.length+1,
                         saveTable: 'tb_cst_pers_20190919_BGJG102',
                         saveResult: '由原表XXXX归档至表tb_cst_unit_20190919_BGJG102', usrName: 'admin',
                         timestamp: new Date()}
@@ -255,7 +258,7 @@ export default {
             this.list.unshift(temp)
             this.$message({
               type: 'success',
-              message: '审计完毕!'
+              message: '归档完毕!'
             })
           })
           //await deleteRole(row.key)

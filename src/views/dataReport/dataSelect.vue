@@ -21,10 +21,10 @@
         </div>
       </template>
       <template slot="paneR">
-       <div>
+       <div v-loading="listLoading" element-loading-text="解密查询中">
          <div class="filter-container">
            <!-- <el-input v-model="listQuery.name" placeholder="菜单名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
-           <el-select v-model="listQuery.dataType" style="width: 300px" class="filter-item" @change="handleFilter">
+           <el-select v-model="listQuery.dataType" style="width: 300px" class="filter-item" @change="handleTypeClick">
              <el-option v-for="item in dataTypeOptions" :key="item.key" :label="item.label" :value="item.key" />
            </el-select>
            <!-- <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
@@ -35,9 +35,10 @@
            </el-button>
          </div>
          <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
-           <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" :width="flexColumnWidth(item)" :show-overflow-tooltip="true" />
+           <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" width="180px" :show-overflow-tooltip="true" />
+           <!-- :width="flexColumnWidth(item)"-->
          </el-table>
-        <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
+        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList"/>
          </div>
       </template>
     </split-pane>
@@ -53,10 +54,6 @@ import { getTree } from '@/api/bankManage'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-const defaultItem = {
-  dataType: '',
-  parent_id: null
-}
 export default {
   name: 'ComplexTable',
   components: { Pagination, splitPane },
@@ -86,7 +83,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -106,7 +103,11 @@ export default {
                         { key: 'tb_risk_his', label: '存量客户检查期限内历次风险等级划分表'},
                         { key: 'tb_lwhc_log', label: '公民联网核查日志记录表'},
                         { key: 'tb_lar_report', label: '大额交易报告明细'},
-                        { key: 'tb_sus_report', label: '可疑交易报告明细'}]
+                        { key: 'tb_sus_report', label: '可疑交易报告明细'}],
+        defaultItem: {
+          dataType: '',
+          parent_id: ''
+        }
 
     }
   },
@@ -157,10 +158,23 @@ export default {
     },
     handleNodeClick(node) {
       // 刷新右边查询table
-      defaultItem.parent_id = node.id
-      this.getList(node.id)
+      this.defaultItem.parent_id = node.id
+      //this.getList()
+    },
+    handleTypeClick() {
+      // 刷新右边查询table
+      this.defaultItem.dataType = this.dataType
+      //this.getList()
     },
     getList() {
+      if ( this.defaultItem.parent_id === '') {
+        this.$message.error('请先选择银行网点再查询')
+        return false
+      }
+      if (this.defaultItem.dataType === '') {
+        this.$message.error('请先选择数据类型再查询')
+        return false
+      }
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.tableData = response.data.items
@@ -176,7 +190,6 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.listLoading = true
       this.getList()
     },
 

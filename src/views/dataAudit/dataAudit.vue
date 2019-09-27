@@ -53,10 +53,10 @@
             <el-table-column align="center" label="审计时间" >
               <template slot-scope="{row}">
                 <i class="el-icon-time" />
-                <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+                <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="审计结果" align="center">
+            <el-table-column label="审计结果" align="center" width="90">
               <template slot-scope="{row}">
                 {{ row.auditResult }}
               </template>
@@ -72,7 +72,7 @@
               </template>
             </el-table-column>
           </el-table>
-        <!-- <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" /> -->
+        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
          </div>
       </template>
     </split-pane>
@@ -115,14 +115,14 @@
 
 
 import splitPane from 'vue-splitpane'
-import { getDataUploadList } from '@/api/dataUpload'
+import { getDataUploadList, createItem } from '@/api/dataUpload'
 import { getTree } from '@/api/bankManage'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const defaultItem = {
   dataType: '',
-  parent_id: null
+  parent_id: ''
 }
 export default {
   name: 'ComplexTable',
@@ -168,7 +168,6 @@ export default {
     }
   },
   created() {
-    //this.getList()
     this.fetchTree()
   },
   methods: {
@@ -216,7 +215,7 @@ export default {
       // 刷新右边查询table
       defaultItem.parent_id = node.id
       this.list = []
-      //this.getList(node.id)
+      this.handleFilter()
     },
     getList() {
       this.listLoading = true
@@ -234,7 +233,6 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.listLoading = true
       this.getList()
     },
 
@@ -262,19 +260,29 @@ export default {
           : ''
     },
     handleAudit() {
+      if (defaultItem.parent_id === '') {
+        this.$message.error('请先选择银行网点再审计')
+        return false
+      }
       this.$confirm('确认审计此银行的记录吗?', '警告', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(async() => {
-          //await deleteRole(row.key)
-          //this.rolesList.splice($index, 1)
-          this.getList(defaultItem.parent_id)
-          this.$message({
-            type: 'success',
-            message: '审计完毕!'
+        .then(() => {
+          const temp = { bank_name: '工商银行济南分行',
+                        auditNum: this.list.length+1,
+                        auditDetail: 'XXXX表中XXX记录中电话号码不规范；XXXX表中XXX记录中有XX问题；',
+                        auditResult: '不通过', usrName: 'admin',
+                        timestamp: new Date()}
+          createItem(temp).then(() => {
+            this.list.unshift(temp)
+            this.$message({
+              type: 'success',
+              message: '审计完毕!'
+            })
           })
+
         })
         .catch(err => { console.error(err) })
     },

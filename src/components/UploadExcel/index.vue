@@ -1,16 +1,16 @@
 <template>
   <div>
     <input ref="excel-upload-input" class="excel-upload-input" type="file" accept=".xlsx, .xls" @change="handleClick">
-    <el-button :loading="loading" style="margin-left:16px;" size="mini" type="primary" @click="handleUpload">
+    <el-button :loading="loading" style="margin-left:16px;" type="primary" @click="handleUpload">
       上传
     </el-button>
+    </div>
     <!-- <div class="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
       Drop excel file here or
      <el-button :loading="loading" style="margin-left:16px;" size="mini" type="primary" @click="handleUpload">
        Browse
      </el-button>
     </div> -->
-  </div>
 </template>
 
 <script>
@@ -42,13 +42,13 @@ export default {
       if (this.loading) return
       const files = e.dataTransfer.files
       if (files.length !== 1) {
-        this.$message.error('Only support uploading one file!')
+        this.$message.error('仅支持上传一个文件!')
         return
       }
       const rawFile = files[0] // only use files[0]
-
+      console.log("-------"+!this.isExcel(rawFile))
       if (!this.isExcel(rawFile)) {
-        this.$message.error('Only supports upload .xlsx, .xls, .csv suffix files')
+        this.$message.error('只能上传后缀为 .xlsx, .xls, .csv 的文件')
         return false
       }
       this.upload(rawFile)

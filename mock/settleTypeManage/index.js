@@ -27,7 +27,175 @@ const List = [{
     name: '转出',
     bord_type: '境内',
     bank_name: '工商银行烟台分行'
-  }
+  },
+  {
+      head_no: 'BGJG102',
+      settle_type: 'YWLX001',
+      name: '取现',
+      bord_type: '境内',
+      bank_name: '工商银行济南分行'
+    },
+    {
+      head_no: 'BGJG102',
+      settle_type: 'YWLX002',
+      name: '存款',
+      bord_type: '境内',
+      bank_name: '工商银行烟台分行'
+    },
+    {
+      head_no: 'BGJG102',
+      settle_type: 'YWLX003',
+      name: '转入',
+      bord_type: '境内',
+      bank_name: '工商银行济南分行'
+    },
+    {
+      head_no: 'BGJG102',
+      settle_type: 'YWLX004',
+      name: '转出',
+      bord_type: '境内',
+      bank_name: '工商银行烟台分行'
+    },
+    {
+        head_no: 'BGJG102',
+        settle_type: 'YWLX001',
+        name: '取现',
+        bord_type: '境内',
+        bank_name: '工商银行济南分行'
+      },
+      {
+        head_no: 'BGJG102',
+        settle_type: 'YWLX002',
+        name: '存款',
+        bord_type: '境内',
+        bank_name: '工商银行烟台分行'
+      },
+      {
+        head_no: 'BGJG102',
+        settle_type: 'YWLX003',
+        name: '转入',
+        bord_type: '境内',
+        bank_name: '工商银行济南分行'
+      },
+      {
+        head_no: 'BGJG102',
+        settle_type: 'YWLX004',
+        name: '转出',
+        bord_type: '境内',
+        bank_name: '工商银行烟台分行'
+      },
+      {
+          head_no: 'BGJG102',
+          settle_type: 'YWLX001',
+          name: '取现',
+          bord_type: '境内',
+          bank_name: '工商银行济南分行'
+        },
+        {
+          head_no: 'BGJG102',
+          settle_type: 'YWLX002',
+          name: '存款',
+          bord_type: '境内',
+          bank_name: '工商银行烟台分行'
+        },
+        {
+          head_no: 'BGJG102',
+          settle_type: 'YWLX003',
+          name: '转入',
+          bord_type: '境内',
+          bank_name: '工商银行济南分行'
+        },
+        {
+          head_no: 'BGJG102',
+          settle_type: 'YWLX004',
+          name: '转出',
+          bord_type: '境内',
+          bank_name: '工商银行烟台分行'
+        },
+        {
+            head_no: 'BGJG102',
+            settle_type: 'YWLX001',
+            name: '取现',
+            bord_type: '境内',
+            bank_name: '工商银行济南分行'
+          },
+          {
+            head_no: 'BGJG102',
+            settle_type: 'YWLX002',
+            name: '存款',
+            bord_type: '境内',
+            bank_name: '工商银行烟台分行'
+          },
+          {
+            head_no: 'BGJG102',
+            settle_type: 'YWLX003',
+            name: '转入',
+            bord_type: '境内',
+            bank_name: '工商银行济南分行'
+          },
+          {
+            head_no: 'BGJG102',
+            settle_type: 'YWLX004',
+            name: '转出',
+            bord_type: '境内',
+            bank_name: '工商银行烟台分行'
+          },
+          {
+              head_no: 'BGJG102',
+              settle_type: 'YWLX001',
+              name: '取现',
+              bord_type: '境内',
+              bank_name: '工商银行济南分行'
+            },
+            {
+              head_no: 'BGJG102',
+              settle_type: 'YWLX002',
+              name: '存款',
+              bord_type: '境内',
+              bank_name: '工商银行烟台分行'
+            },
+            {
+              head_no: 'BGJG102',
+              settle_type: 'YWLX003',
+              name: '转入',
+              bord_type: '境内',
+              bank_name: '工商银行济南分行'
+            },
+            {
+              head_no: 'BGJG102',
+              settle_type: 'YWLX004',
+              name: '转出',
+              bord_type: '境内',
+              bank_name: '工商银行烟台分行'
+            },
+            {
+                head_no: 'BGJG102',
+                settle_type: 'YWLX001',
+                name: '取现',
+                bord_type: '境内',
+                bank_name: '工商银行济南分行'
+              },
+              {
+                head_no: 'BGJG102',
+                settle_type: 'YWLX002',
+                name: '存款',
+                bord_type: '境内',
+                bank_name: '工商银行烟台分行'
+              },
+              {
+                head_no: 'BGJG102',
+                settle_type: 'YWLX003',
+                name: '转入',
+                bord_type: '境内',
+                bank_name: '工商银行济南分行'
+              },
+              {
+                head_no: 'BGJG102',
+                settle_type: 'YWLX004',
+                name: '转出',
+                bord_type: '境内',
+                bank_name: '工商银行烟台分行'
+              }
 ]
 const treeData = [{
     id: 1,
@@ -60,10 +228,26 @@ export default [
   {
     url: '/settleTypeManage/getTableList',
     type: 'get',
-    response: _ => {
+    response: config => {
+      const { name, page = 1, limit = 20, sort } = config.query
+
+      let mockList = List.filter(item => {
+        if (name && item.name.indexOf(name) < 0) return false
+        return true
+      })
+
+      if (sort === '-id') {
+        mockList = mockList.reverse()
+      }
+
+      const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
       return {
         code: 20000,
-        data: List
+        data: {
+          total: mockList.length,
+          items: pageList
+        }
       }
     }
   },

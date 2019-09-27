@@ -38,6 +38,7 @@ const roles = [
     saveTable: 'tb_cst_pers_20190919_BGJG102',
     saveResult: '由原表XXXX归档至表tb_cst_unit_20190919_BGJG102',
   },
+  
 ]
 
 const banks = [

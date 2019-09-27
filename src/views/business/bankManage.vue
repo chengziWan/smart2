@@ -24,7 +24,7 @@
       <template slot="paneR">
         <div>
           <el-button type="primary" style="margin-top: 10px;" @click="handleAdd">新增</el-button>
-          <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" style="width: 100%;margin-top:30px;" border>
+          <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" style="width: 100%;margin-top:30px;" border fit>
             <el-table-column align="center" label="序号" width="80">
               <template slot-scope="scope">
                 {{ scope.$index+1 }}
@@ -62,6 +62,7 @@
               </template>
             </el-table-column>
           </el-table>
+          <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchList" />
         </div>
       </template>
     </split-pane>
@@ -96,6 +97,8 @@
 import splitPane from 'vue-splitpane'
 import { deepClone } from '@/utils'
 import { getTree, getTableList, addItem, updateItem, deleteItem } from '@/api/bankManage'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
 const defaultItem = {
   head_no: '11',
   bank_code1: '22',
@@ -107,11 +110,18 @@ const defaultItem = {
 
 export default {
   name: 'SplitpaneDemo',
-  components: { splitPane },
+  components: { splitPane, Pagination },
   data() {
     return {
       filterText: '',
       list: [],
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        name: undefined
+        //sort: '+id'
+      },
       listLoading: false,
       autoWidth: true,
       item: Object.assign({}, defaultItem),
@@ -122,7 +132,7 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'name'
-      },
+      }
     }
   },
   watch: {
@@ -131,7 +141,7 @@ export default {
     }
   },
   created() {
-    this.fetchList('')
+    this.fetchList()
     this.fetchTree()
   },
   methods: {
@@ -142,17 +152,23 @@ export default {
     handleNodeClick(node) {
       // 刷新右边查询table
       defaultItem.parent_id = node.id
-      this.fetchList(node.id)
+      this.fetchList()
     },
     resize() {
       console.log('resize')
     },
     // 获取右侧查询列表
-    async fetchList(parentId) {
+    async fetchList() {
       this.listLoading = true
-      const res = await getTableList(parentId)
-      this.list = res.data
-      this.listLoading = false
+      getTableList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+      
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
     },
     // 获取左侧树
     async fetchTree() {
