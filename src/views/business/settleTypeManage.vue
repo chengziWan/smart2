@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <split-pane :min-percent="10" :default-percent="20" split="vertical" @resize="resize">
-      <template slot="paneL">
+    <div class="app-container">
+        <el-row :gutter="20">
+          <el-col :span="6">
         <div style="margin-left: 10px;margin-top: 10px;">
           <el-input
             v-model="filterText"
@@ -20,8 +20,8 @@
             @node-click="handleNodeClick"
           />
         </div>
-      </template>
-      <template slot="paneR">
+      </el-col>
+      <el-col :span="18">
         <div>
           <el-button type="primary" style="margin-top: 10px;" @click="handleAdd">新增</el-button>
           <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" style="width: 100%;margin-top:30px;" border>
@@ -54,8 +54,8 @@
           </el-table>
           <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchList" />
         </div>
-      </template>
-    </split-pane>
+      </el-col>
+    </el-row>
     <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'编辑信息':'新增信息'">
       <el-form :model="item" label-width="120px" label-position="right">
         <el-form-item label="报告机构编码">
@@ -78,7 +78,6 @@
 
 <script>
 
-import splitPane from 'vue-splitpane'
 import { deepClone } from '@/utils'
 import { getTree, getTableList, addItem, updateItem, deleteItem } from '@/api/settleTypeManage'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -92,7 +91,7 @@ const defaultItem = {
 
 export default {
   name: 'SettleTypeManage',
-  components: { splitPane, Pagination },
+  components: { Pagination },
   data() {
     return {
       filterText: '',

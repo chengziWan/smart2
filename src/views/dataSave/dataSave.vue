@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <split-pane :min-percent='10' :default-percent='20' split="vertical">
-      <template slot="paneL">
+      <el-row :gutter="20">
+        <el-col :span="6">
         <div style="margin-left: 10px;">
           <el-input
             placeholder="输入关键字进行过滤"
@@ -19,8 +19,8 @@
             @node-click="handleNodeClick"
           />
         </div>
-      </template>
-      <template slot="paneR">
+      </el-col>
+     <el-col :span="18">
        <div>
          <div class="filter-container">
            <!-- <el-input v-model="listQuery.name" placeholder="菜单名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
@@ -84,16 +84,14 @@
           </el-table>
         <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
          </div>
-      </template>
-    </split-pane>
-
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 
 
-import splitPane from 'vue-splitpane'
 import { getDataUploadList, createItem } from '@/api/dataUpload'
 import { getTree } from '@/api/bankManage'
 import waves from '@/directive/waves' // waves directive
@@ -105,7 +103,7 @@ const defaultItem = {
 }
 export default {
   name: 'ComplexTable',
-  components: { Pagination, splitPane },
+  components: { Pagination },
   directives: { waves },
   filters: {
     statusFilter(status) {
