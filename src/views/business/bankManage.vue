@@ -139,7 +139,6 @@ export default {
     }
   },
   created() {
-    this.fetchList()
     this.fetchTree()
   },
   methods: {

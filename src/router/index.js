@@ -212,7 +212,7 @@ export const asyncRoutes = [
     component: Layout,
     //redirect: '/dataReport/page',
     alwaysShow: true, // will always show the root menu
-    name: '数据上报',
+    name: 'dataReportAll',
     meta: {
       title: '数据上报',
       icon: 'list',
@@ -242,7 +242,7 @@ export const asyncRoutes = [
       {
         path: 'dataReport',
         component: () => import('@/views/dataReport/dataReport'),
-        name: '数据上报',
+        name: 'dataReport',
         meta: {
           title: '数据上报',
           roles: ['admin', 'editor']// you can set roles in root nav
@@ -258,7 +258,7 @@ export const asyncRoutes = [
         path: 'dataSelect',
         component: () => import('@/views/dataReport/dataSelect'),
         name: '数据查看',
-        meta: { title: '数据查看', icon: 'excel',
+        meta: { title: '数据查看', icon: 'eye-open',
                 roles: ['admin', 'editor']// you can set roles in root nav
               }
       }
