@@ -7,7 +7,7 @@
       </pan-thumb>
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's 首页</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">{{ name }}'s 首页</span>
       </div>
     </div>
     <div>
