@@ -251,16 +251,33 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/dataSelect',
+    path: '/dataView',
     component: Layout,
+    //redirect: '/dataReport/page',
+    alwaysShow: true, // will always show the root menu
+    name: 'dataView',
+    meta: {
+      title: '数据查询',
+      icon: 'eye-open',
+      roles: ['admin','editor'] // you can set roles in root nav
+    },
     children: [
+     {
+       path: 'dataSelect',
+       component: () => import('@/views/dataView/dataSelect'),
+       name: 'dataSelect',
+       meta: { title: '原始数据查看',
+               roles: ['admin', 'editor']// you can set roles in root nav
+             }
+     },
       {
-        path: 'dataSelect',
-        component: () => import('@/views/dataReport/dataSelect'),
-        name: '数据查看',
-        meta: { title: '数据查看', icon: 'eye-open',
-                roles: ['admin', 'editor']// you can set roles in root nav
-              }
+        path: 'dataAuditView',
+        component: () => import('@/views/dataView/dataAuditView'),
+        name: 'dataAuditView',
+        meta: {
+          title: '审计结果查看',
+          roles: ['admin', 'editor']// you can set roles in root nav
+        }
       }
     ]
   },

@@ -92,7 +92,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 import { deepClone } from '@/utils'
 import { getTree, getTableList, addItem, updateItem, deleteItem } from '@/api/bankManage'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -130,7 +130,10 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'name'
-      }
+      },
+	  treeQuery:{
+	            currentRole: 'admin'
+	  }
     }
   },
   watch: {
@@ -138,7 +141,15 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
+  computed: {
+      ...mapGetters([
+        'roles'
+      ])
+  },
   created() {
+	if (!this.roles.includes('admin')) {
+		this.treeQuery.currentRole = 'editor'
+	}
     this.fetchTree()
   },
   methods: {
@@ -169,7 +180,7 @@ export default {
     },
     // 获取左侧树
     async fetchTree() {
-      const res = await getTree()
+      const res = await getTree(this.treeQuery)
       this.treeData = this.generateTree(res.data)
     },
     // Reshape the routes structure so that it looks the same as the sidebar

@@ -1,5 +1,26 @@
 <template>
   <div class="app-container">
+    <el-row :gutter="20">
+      <el-col :span="6">
+          <div style="margin-left: 10px;">
+            <el-input
+              placeholder="输入关键字进行过滤"
+              v-model="filterText">
+            </el-input>
+            <el-tree
+              class="filter-tree"
+              ref="tree"
+              :data="treeData"
+              :props="defaultProps"
+              :filter-node-method="filterNode"
+              node-key="id"
+              :highlight-current="true"
+              :check-on-click-node="true"
+              @node-click="handleNodeClick"
+            />
+          </div>
+      </el-col>
+      <el-col :span="18">
     <div class="filter-container">
       <el-input v-model="listQuery.name" placeholder="菜单名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
@@ -48,7 +69,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" width="110px" align="center">
+    <!--  <el-table-column label="创建人" width="110px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.create_usr }}</span>
         </template>
@@ -57,7 +78,7 @@
         <template slot-scope="{row}">
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -74,7 +95,8 @@
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
+    </el-col>
+    </el-row>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="菜单名称" prop="name">
@@ -108,7 +130,7 @@
 </template>
 
 <script>
-import { fetchList, createItem, updateItem } from '@/api/menuManage'
+import { getTree, fetchList, createItem, updateItem } from '@/api/menuManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -129,6 +151,17 @@ export default {
   },
   data() {
     return {
+      filterText: '',
+      // TODO 银行树的数据
+      treeData: [],
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      defaultItem: {
+        parent_id: '10'
+      },
+
       tableKey: 0,
       list: null,
       total: 0,
@@ -136,6 +169,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
+        parent_id: '10',
         name: undefined,
         sort: '+id'
       },
@@ -167,9 +201,56 @@ export default {
     }
   },
   created() {
+    this.fetchTree()
     this.getList()
   },
   methods: {
+    // 获取左侧树
+    async fetchTree() {
+      const res = await getTree()
+      this.treeData = this.generateTree(res.data)
+    },
+    // Reshape the routes structure so that it looks the same as the sidebar
+    generateTree(datas) {
+      const res = []
+      for (let route of datas) {
+        const onlyOneShowingChild = this.onlyOneShowingChild(route.children, route)
+        if (route.children && onlyOneShowingChild && !route.alwaysShow) {
+          route = onlyOneShowingChild
+        }
+        const data = {
+          id: route.id,
+          name: route.name
+        }
+        // recursive child routes
+        if (route.children) {
+          data.children = this.generateTree(route.children)
+        }
+        res.push(data)
+      }
+      return res
+    },
+    // reference: src/view/layout/components/Sidebar/SidebarItem.vue
+    onlyOneShowingChild(children = [], parent) {
+      let onlyOneChild = null
+      const showingChildren = children.filter(item => !item.hidden)
+      // Show parent if there are no child route to display
+      if (showingChildren.length === 0) {
+        onlyOneChild = { ... parent, noShowingChildren: true }
+        return onlyOneChild
+      }
+      return false
+    },
+    filterNode(value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
+    },
+    handleNodeClick(node) {
+      // 刷新右边查询table
+      this.defaultItem.parent_id = node.id
+      this.listQuery.parent_id = node.id
+      this.getList()
+    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {

@@ -47,7 +47,7 @@
 
 <script>
 
-
+import { mapGetters } from 'vuex'
 import { fetchList } from '@/api/dataSelect'
 import { getTree } from '@/api/bankManage'
 import waves from '@/directive/waves' // waves directive
@@ -106,18 +106,29 @@ export default {
         defaultItem: {
           dataType: '',
           parent_id: ''
+        },
+        treeQuery:{
+          currentRole: 'admin'
         }
 
     }
   },
+  computed: {
+    ...mapGetters([
+      'roles'
+    ])
+  },
   created() {
+    if (!this.roles.includes('admin')) {
+      this.treeQuery.currentRole = 'editor'
+    }
     //this.getList()
     this.fetchTree()
   },
   methods: {
     // 获取左侧树
     async fetchTree() {
-      const res = await getTree()
+      const res = await getTree(this.treeQuery)
       this.treeData = this.generateTree(res.data)
     },
     // Reshape the routes structure so that it looks the same as the sidebar

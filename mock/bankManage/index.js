@@ -80,6 +80,16 @@ const treeData = [{
       id: 8,
       name: '交通银行山西分行'
     }]
+  },
+  {
+    id: 10,
+    name: '招商银行'
+  }
+]
+const treeData2 = [
+  {
+    id: 10,
+    name: '招商银行'
   }
 ]
 
@@ -88,32 +98,38 @@ export default [
   {
     url: '/bankManage/getTree',
     type: 'get',
-    response: _ => {
+    response: config => {
+      const { currentRole } = config.query
+      let mockList =[]
+
+      if (currentRole.includes('admin'))
+        mockList = treeData;
+      else
+        mockList = treeData2
       return {
         code: 20000,
-        data: treeData
+        data: mockList
       }
     }
   },
-
   // mock get all roles form server
   {
     url: '/bankManage/getTableList',
     type: 'get',
     response: config => {
       const { name, page = 1, limit = 20, sort } = config.query
-    
+
       let mockList = List.filter(item => {
         if (name && item.name.indexOf(name) < 0) return false
         return true
       })
-    
+
       if (sort === '-id') {
         mockList = mockList.reverse()
       }
-    
+
       const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-    
+
       return {
         code: 20000,
         data: {

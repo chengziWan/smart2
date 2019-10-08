@@ -35,7 +35,7 @@
            </el-button>
          </div>
           <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
-            <el-table-column align="center" label="序号" width="70px">
+            <el-table-column align="center" label="序号" width="60px">
                           <template slot-scope="scope">
                             {{ scope.$index+1 }}
                           </template>
@@ -71,7 +71,7 @@
                             {{ scope.row.saveResult }}
                           </template>
                         </el-table-column>
-                        <el-table-column label="归档人" align="center" width="80">
+                        <el-table-column label="归档人" align="center" width="70">
                           <template slot-scope="scope">
                             {{ scope.row.usrName }}
                           </template>
@@ -91,7 +91,7 @@
 
 <script>
 
-
+import { mapGetters } from 'vuex'
 import { getDataUploadList, createItem } from '@/api/dataUpload'
 import { getTree } from '@/api/bankManage'
 import waves from '@/directive/waves' // waves directive
@@ -139,18 +139,29 @@ export default {
         sort: '+id'
       },
       sortOptions: [{ label: 'ID 升序', key: '+id' }, { label: 'ID 降序', key: '-id' }],
-      dataTypeOptions: [{ label: '个人客户存量信息表', key: 'aa1' }, { label: '单位客户存量信息表', key: 'aa2' }]
-
+      dataTypeOptions: [{ label: '个人客户存量信息表', key: 'aa1' }, { label: '单位客户存量信息表', key: 'aa2' }],
+	  treeQuery:{
+	            currentRole: 'admin'
+	  }
+	
     }
   },
+  computed: {
+    ...mapGetters([
+      'roles'
+    ])
+  },
   created() {
+	if (!this.roles.includes('admin')) {
+      this.treeQuery.currentRole = 'editor'
+    }
     //this.getList()
     this.fetchTree()
   },
   methods: {
     // 获取左侧树
     async fetchTree() {
-      const res = await getTree()
+      const res = await getTree(this.treeQuery)
       this.treeData = this.generateTree(res.data)
     },
     // Reshape the routes structure so that it looks the same as the sidebar

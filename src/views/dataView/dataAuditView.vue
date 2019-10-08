@@ -22,7 +22,7 @@
       </el-col>
       <el-col :span="18">
        <div>
-         <div class="filter-container">
+         <!-- <div class="filter-container">-->
            <!-- <el-input v-model="listQuery.name" placeholder="菜单名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" /> -->
           <!-- <el-select v-model="listQuery.dataType" style="width: 240px" class="filter-item" @change="handleFilter">
              <el-option v-for="item in dataTypeOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -30,10 +30,10 @@
            <!-- <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
              <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
            </el-select> -->
-           <el-button v-waves class="filter-item" type="primary" @click="handleAudit">
+           <!-- <el-button v-waves class="filter-item" type="primary" @click="handleAudit">
              审计
-           </el-button>
-         </div>
+           </el-button> -->
+          <!--</div> -->
           <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
             <el-table-column align="center" label="序号" width="80">
               <template slot-scope="scope">

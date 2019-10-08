@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function getTree() {
+export function getTree(query) {
   return request({
     url: '/bankManage/getTree',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 

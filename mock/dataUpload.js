@@ -10,7 +10,7 @@ const roles = [
     bord_type:'境内',
     bank_name: '工商银行济南分行',
     dataType: '存量个人客户信息表',
-    auditNum: '1',
+    auditNum: '2',
     auditResult: '通过',//XXXX表中XXX记录中电话号码不规范；XXXX表中XXX记录中有XX问题；
     auditDetail:'XXXX表中XXX记录中电话号码不规范；XXXX表中XXX记录中有XX问题；',
     usrName: 'admin',
@@ -28,7 +28,7 @@ const roles = [
     bord_type:'境内',
     bank_name: '工商银行济南分行',
     dataType: '存量单位客户信息表',
-    auditNum: '2',
+    auditNum: '1',
     auditResult: '不通过',
     auditDetail:'XXXX表中XXX记录中电话号码不规范；XXXX表中XXX记录中有XX问题；',
     usrName: 'admin',

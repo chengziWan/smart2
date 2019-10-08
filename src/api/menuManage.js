@@ -1,5 +1,11 @@
 import request from '@/utils/request'
-
+export function getTree(query) {
+  return request({
+    url: '/menuManage/getTree',
+    method: 'get',
+    params: query
+  })
+}
 export function fetchList(query) {
   return request({
     url: '/menuManage/list',
