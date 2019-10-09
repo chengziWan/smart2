@@ -33,7 +33,9 @@
            <el-button v-waves class="filter-item" type="primary" @click="handleSave">
              归档
            </el-button>
-           <el-button v-waves class="filter-item" type="primary" @click="handleExport">
+           <!-- <a :href="require('./file/file.txt')" download='file'> -->
+
+           <el-button v-waves class="filter-item" type="primary" @click="handleDownload">
              加密导出
            </el-button>
          </div>
@@ -143,6 +145,8 @@ export default {
       },
       sortOptions: [{ label: 'ID 升序', key: '+id' }, { label: 'ID 降序', key: '-id' }],
       dataTypeOptions: [{ label: '个人客户存量信息表', key: 'aa1' }, { label: '单位客户存量信息表', key: 'aa2' }],
+
+      downloadLoading: false,
 	  treeQuery:{
 	            currentRole: 'admin'
 	  }
@@ -280,9 +284,13 @@ export default {
         })
         .catch(err => { console.error(err) })
     },
-    handleExport(){
-
-    }
+    handleDownload(){
+      this.downloadLoading = true
+        import('@/vendor/Export2Zip').then(zip => {
+          zip.export_txt_to_zip2('', '', '', '')
+          this.downloadLoading = false
+        })
+    },
   }
 }
 </script>
