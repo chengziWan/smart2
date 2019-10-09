@@ -30,7 +30,7 @@ import * as filters from './filters' // global filters
 import { mockXHR } from '../mock'
 
 if (process.env.NODE_ENV === 'production') {
-  //mockXHR()//调用后台接口时要把mock数据注释掉，否则会有影响
+  mockXHR()//调用后台接口时要把mock数据注释掉，否则会有影响
 }
 
 Vue.use(Element, {

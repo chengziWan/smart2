@@ -74,7 +74,6 @@ export const asyncRoutes = [
       roles: ['admin'] // you can set roles in root nav
     },
     children: [
-      //add by wcc 20190919--菜单管理
       {
         path: 'menuManage',
         component: () => import('@/views/sysManage/menuManage'),
@@ -84,7 +83,6 @@ export const asyncRoutes = [
           roles: ['admin']
         }
       },
-      //add by wcc 20190919--角色管理
       {
         path: 'roleManage',
         component: () => import('@/views/sysManage/roleManage'),
@@ -162,15 +160,6 @@ export const asyncRoutes = [
           roles: ['admin', 'editor']// you can set roles in root nav
         }
       },
-      // {
-      //   path: 'dataSelect',
-      //   component: () => import('@/views/dataReport/dataSelect'),
-      //   name: '数据查看',
-      //   meta: {
-      //     title: '数据查看',
-      //     roles: ['admin', 'editor'] // you can set roles in root nav
-      //   }
-      // },
       //add by wcc 20190919--数据上报
       {
         path: 'dataReport',

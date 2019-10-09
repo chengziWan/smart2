@@ -33,6 +33,9 @@
            <el-button v-waves class="filter-item" type="primary" @click="handleSave">
              归档
            </el-button>
+           <el-button v-waves class="filter-item" type="primary" @click="handleExport">
+             加密导出
+           </el-button>
          </div>
           <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
             <el-table-column align="center" label="序号" width="60px">
@@ -143,7 +146,7 @@ export default {
 	  treeQuery:{
 	            currentRole: 'admin'
 	  }
-	
+
     }
   },
   computed: {
@@ -262,7 +265,7 @@ export default {
                         dataType: '存量单位客户信息表',saveNum: this.list.length+1,
                         saveTable: 'tb_cst_pers_20190919_BGJG102',
                         saveResult: '由原表XXXX归档至表tb_cst_unit_20190919_BGJG102', usrName: 'admin',
-                        timestamp: new Date()}
+                        timestamp: new Date() }
           createItem(temp).then(() => {
             this.list.unshift(temp)
             this.$message({
@@ -276,6 +279,9 @@ export default {
 
         })
         .catch(err => { console.error(err) })
+    },
+    handleExport(){
+
     }
   }
 }
