@@ -104,11 +104,12 @@ export const constantRoutes = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
+//export const asyncRoutes = [
+  let localRoutermap = [
   {
     path: '/sysManage',
     component: Layout,
-    redirect: '/sysManage/page',
+    //redirect: '/sysManage/page',
     alwaysShow: true, // will always show the root menu
     name: '系统管理',
     meta: {
@@ -292,6 +293,20 @@ export const asyncRoutes = [
     ]
   },
 ]
+//////////////////
+const routerGetType = 'server'//local
+
+if (routerGetType === 'server') {
+  localRoutermap = [
+    { path: '*', redirect: '/404', hidden: true }
+  ]
+}
+
+export const routerMode = routerGetType
+
+export const asyncRoutes = localRoutermap
+////////////////////////
+
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

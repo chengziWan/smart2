@@ -30,3 +30,14 @@ export function updateItem(data) {
     data
   })
 }
+
+/**
+  *根据角色获得可见菜单
+  */
+export function getMenuByRole(query) {
+  return request({
+    url: '/menuManage/getMenuByRole',
+    method: 'get',
+    params: query
+  })
+}

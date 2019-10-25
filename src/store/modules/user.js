@@ -110,7 +110,7 @@ const actions = {
       resetRouter()
 
       // generate accessible routes map based on roles
-      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })//permission/generateRoutes
 
       // dynamically add accessible routes
       router.addRoutes(accessRoutes)
